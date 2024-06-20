@@ -53,11 +53,12 @@ unset($_SESSION['wire_transfer'], $_SESSION['dom_transfer']);
 							if(isset($_GET['dormant']))
 								{
 									?><br>
-									<div class='alert alert-warning'>
-									 
-										<strong>Sorry, your account has been frozen due to the need for an account upgrade,  please contact customer care at,  <a href="mailto:<?= $page['url_email'] ?>"><?= $page['url_email'] ?></a>&nbsp; for further information.</strong> 
-									</div>
-									<?php
+<div class='alert alert-warning'>
+
+    <strong>Sorry, your account has been frozen due to the need for an account upgrade, please contact customer care at,
+        <a href="mailto:<?= $page['url_email'] ?>"><?= $page['url_email'] ?></a>&nbsp; for further information.</strong>
+</div>
+<?php
 								}
 						?>
 <!-- Wallet Card -->
@@ -180,38 +181,42 @@ unset($_SESSION['wire_transfer'], $_SESSION['dom_transfer']);
 
             ?>
 
-                <a href="./transaction-info.php?id=<?php echo $result['trans_id']; ?>" class="item">
-                    <div class="detail">
-                        <div>
-                            <h2><?= $result['trans_type'] ?></h2>
+            <a href="./transaction-info.php?id=<?php echo $result['trans_id']; ?>" class="item">
+                <div class="detail">
+                    <div>
 
-                            <p><?= $result['created_at'] ?></p>
-                        </div>
+                        <h2><?= $result['trans_type'] ?></h2>
+                        <span><?= $result['account_name'] ?></span>
+
+                        <p><?= $result['created_at'] ?></p>
+
                     </div>
-                    <div class="right">
-                        <?php
+                </div>
+                <div class="right">
+                    <?php
                         if ($result['transaction_type'] === 'credit') {
                         ?>
 
-                            <h2 class="text-success">
-                                +<?php echo number_format($amount, 2, '.', ','); ?>
-                            </h2>
+                    <h2 class="text-success">
+                        +<?= $currency ?><?php echo number_format($amount, 2, '.', ','); ?>
+                    </h2>
 
-                        <?php
+                    <?php
                         } else {
                         ?>
 
-                            <h2 class="text-danger">
-                                -<?php echo number_format($amount, 2, '.', ','); ?>
-                            </h2>
+                    <h2 class="text-danger">
+                        -<?= $currency ?><?php echo number_format($amount, 2, '.', ','); ?>
+                    </h2>
 
-                        <?php
+                    <?php
                         }
                         ?>
+                    <strong> <?= $result['trans_status'] ?></strong>
 
 
-                    </div>
-                </a>
+                </div>
+            </a>
             <?php
 
             }
@@ -238,22 +243,22 @@ unset($_SESSION['wire_transfer'], $_SESSION['dom_transfer']);
 
         if ($stmt->rowCount() == 0) {
         ?>
-            <div class="transactions">
-                <a href="#" class="item">
+        <div class="transactions">
+            <a href="#" class="item">
 
-                    <h2>No transaction Yet</h2>
+                <h2>No transaction Yet</h2>
 
-                </a>
-            </div>
+            </a>
+        </div>
 
         <?php
         } else {
 
         ?>
 
-            <div class="section mt-3 mb-3">
-                <a href="<?= $web_url ?>/user/transaction.php" class="btn btn-lg btn-block btn-primary">Load More</a>
-            </div>
+        <div class="section mt-3 mb-3">
+            <a href="<?= $web_url ?>/user/transaction.php" class="btn btn-lg btn-block btn-primary">Load More</a>
+        </div>
 
         <?php
         }
