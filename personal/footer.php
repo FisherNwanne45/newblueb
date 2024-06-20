@@ -60,8 +60,8 @@
                                             class="fa-sharp fa-solid fa-location-dot"></i><?= $page['url_address'] ?></a>
                                 </div>
                                 <div class="tp-footer-widget-contact-inner">
-                                    <a href="tel:<?= $page['url_tel'] ?>"><i
-                                            class="fa-solid fa-phone"></i><?= $page['url_tel'] ?></a>
+                                    <a href="https://t.me/<?= $page['url_tel'] ?>"><i
+                                            class="fa fa-telegram"></i><?= $page['url_tel'] ?></a>
                                 </div>
                                 <div class="tp-footer-widget-contact-inner">
                                     <a href="mailto:<?= $page['url_email'] ?> "><i
