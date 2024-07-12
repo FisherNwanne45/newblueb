@@ -417,6 +417,8 @@ class emailMessage
 
     public function DepositMsg($full_name, $amount, $trans_type, $trans_status, $refrence_id, $APP_NAME, $APP_URL, $SITE_ADDRESS)
     {
+        $formatted_amount = number_format($amount, 2, '.', ',');
+    
         return "<!doctype html>
     <html>
             <head>
@@ -767,7 +769,7 @@ class emailMessage
                                 <tr>
                                 <td>
                                     <h2>Dear $full_name </h2>
-                                    <p>Your $trans_type of  $$amount is $trans_status with the refrence id #$refrence_id</p>
+                                    <p>Your $trans_type of  $$formatted_amount is $trans_status with the refrence id #$refrence_id</p>
                                 </td>
                                 </tr>
                             </table>
@@ -801,6 +803,7 @@ class emailMessage
 
     public function WithdrawMsg($full_name, $amount, $trans_type, $trans_status, $refrence_id, $APP_NAME, $APP_URL, $SITE_ADDRESS)
     {
+        $formatted_amount = number_format($amount, 2, '.', ',');
         return "<!doctype html>
     <html>
             <head>
@@ -1151,7 +1154,7 @@ class emailMessage
                                 <tr>
                                 <td>
                                     <h2>Hi $full_name</h2>
-                                    <p>Your $trans_type of $$amount is $trans_status with the refrence id #$refrence_id</p>
+                                    <p>Your $trans_type of $$formatted_amount is $trans_status with the refrence id #$refrence_id</p>
                                 </td>
                                 </tr>
                             </table>
@@ -1185,6 +1188,7 @@ class emailMessage
 
     public function WireMsg($full_name, $amount, $account_type, $trans_type, $refrence_id, $swift_code, $routine_number, $bank_country, $bank_name, $trans_status, $account_number, $account_name, $APP_NAME, $APP_URL, $SITE_ADDRESS)
     {
+        $formatted_amount = number_format($amount, 2, '.', ',');
         return "<!doctype html>
     <html>
             <head>
@@ -2346,6 +2350,7 @@ class emailMessage
 
     public function DomMsg($full_name, $amount, $account_number, $account_name, $account_type, $bank_country, $trans_type, $refrence_id, $trans_status, $APP_NAME, $APP_URL, $SITE_ADDRESS)
     {
+        $formatted_amount = number_format($amount, 2, '.', ',');
         return "<!doctype html>
     <html>
             <head>
@@ -3114,6 +3119,7 @@ class emailMessage
 
     public function InterMsg($full_name, $amount, $account_number, $account_name, $refrence_id, $trans_type, $trans_status, $APP_NAME, $APP_URL, $SITE_ADDRESS)
     {
+        $formatted_amount = number_format($amount, 2, '.', ',');
         return "<!doctype html>
     <html>
             <head>
@@ -3498,6 +3504,7 @@ class emailMessage
 
     public function StockMsg($full_name, $amount, $account_name, $APP_NAME, $trans_type, $trans_status, $refrence_id, $APP_URL, $SITE_ADDRESS)
     {
+        $formatted_amount = number_format($amount, 2, '.', ',');
         return "<!doctype html>
     <html>
             <head>
@@ -3848,7 +3855,7 @@ class emailMessage
                                 <tr>
                                 <td>
                                     <h2>Hi $full_name</h2>
-                                    <p>Your $trans_type of <strong>$account_name - $$amount</strong> is $trans_status with theb refrence id #$refrence_id</p>
+                                    <p>Your $trans_type of <strong>$account_name - $$formatted_amount</strong> is $trans_status with theb refrence id #$refrence_id</p>
                                 </td>
                                 </tr>
                             </table>
@@ -3882,6 +3889,7 @@ class emailMessage
 
     public function LoanMsg($full_name, $amount, $user_acctno, $trans_type, $trans_status, $APP_NAME, $APP_URL, $SITE_ADDRESS)
     {
+        $formatted_amount = number_format($amount, 2, '.', ',');
         return "<!doctype html>
     <html>
             <head>
@@ -4232,7 +4240,7 @@ class emailMessage
                                 <tr>
                                 <td>
                                     <h2>Hi $full_name</h2>
-                                    <p>Your $trans_type Request with the amount $$amount on your account $user_acctno is $trans_status.</p>
+                                    <p>Your $trans_type Request with the amount $$formatted_amount on your account $user_acctno is $trans_status.</p>
                                 </td>
                                 </tr>
                             </table>
@@ -5038,6 +5046,7 @@ class emailMessage
 
     public function CardMsg($full_name, $card_name, $user_acctno, $amount, $card_status, $APP_NAME, $APP_URL, $SITE_ADDRESS)
     {
+        $formatted_amount = number_format($amount, 2, '.', ',');
         return "<!doctype html>
     <html>
             <head>
@@ -5388,7 +5397,7 @@ class emailMessage
                                 <tr>
                                 <td>
                                     <h2>Hi $full_name,</h2>
-                                    <p>You have been charged with a fee of $$amount for $card_name on account:  $user_acctno request and it is $card_status.</p>
+                                    <p>You have been charged with a fee of $$formatted_amount for $card_name on account:  $user_acctno request and it is $card_status.</p>
                                 </td>
                                 </tr>
                             </table>
