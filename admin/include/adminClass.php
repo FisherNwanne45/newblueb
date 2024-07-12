@@ -11,6 +11,9 @@ class emailMessage
 
     public function AdminFundingMsg($full_name, $amount, $user_balance, $user_acctno, $trans_status, $trans_type, $APP_NAME, $APP_URL, $SITE_ADDRESS)
     {
+        
+        $formatted_amount = number_format($amount, 2, '.', ',');
+    $formatted_balance = number_format($user_balance, 2, '.', ',');
         return "<!doctype html>
 <html>
         <head>
@@ -361,8 +364,8 @@ class emailMessage
                             <tr>
                             <td>
                                 <h2>Hi $full_name,</h2>
-                                <p>A $trans_type transaction of <strong>$amount</strong> occurred on $user_acctno account is $trans_status.<br><br>
-                                <strong>Account Balance: $user_balance</strong>
+                                <p>A $trans_type transaction of <strong>$$formatted_amount</strong> occurred on $user_acctno account is $trans_status.<br><br>
+                                <strong>Account Balance: $ $formatted_balance</strong>
 
 </p>
 </td>
@@ -400,6 +403,8 @@ class emailMessage
 
     public function AdminWithdrawalMsg($full_name, $amount, $user_balance, $user_acctno, $trans_status, $trans_type, $APP_NAME, $APP_URL, $SITE_ADDRESS)
     {
+        $formatted_amount = number_format($amount, 2, '.', ',');
+    $formatted_balance = number_format($user_balance, 2, '.', ',');
         return "<!doctype html>
 <html>
     <head>
@@ -750,8 +755,8 @@ class emailMessage
                         <tr>
                         <td>
                         <h2>Hi $full_name,</h2>
-                        <p>A $trans_type Transaction of <strong>$amount</strong> occurred on $user_acctno account is $trans_status.<br><br>
-                        <strong>Account Balance: $user_balance</strong>
+                        <p>A $trans_type Transaction of <strong>$$formatted_amount</strong> occurred on $user_acctno account is $trans_status.<br><br>
+                        <strong>Account Balance: $ $formatted_balance</strong>
 
 </p>
 </td>
@@ -789,6 +794,7 @@ class emailMessage
 
     public function AdminRegisterMsg($full_name, $acct_no, $acct_status, $APP_NAME, $APP_URL, $SITE_ADDRESS)
     {
+        
         if ($acct_status === 'active') {
         $userStatus = 'ACTIVE';
     } elseif ($acct_status === 'hold') {
@@ -1573,6 +1579,8 @@ class emailMessage
 
     public function AdminWireMsg($full_name, $amount, $user_balance, $trans_status, $trans_type, $APP_NAME, $APP_URL, $SITE_ADDRESS)
     {
+        $formatted_amount = number_format($amount, 2, '.', ',');
+    $formatted_balance = number_format($user_balance, 2, '.', ',');
         return "<!doctype html>
     <html>
             <head>
@@ -1923,8 +1931,8 @@ class emailMessage
                                 <tr>
                                 <td>
                                 <h2>Hi $full_name,</h2>
-                                <p>A $trans_type Transaction of <strong>$amount</strong> is $trans_status.<br><br>
-                                <strong>Account Balance: $user_balance</strong></p>
+                                <p>A $trans_type Transaction of <strong>$$formatted_amount</strong> is $trans_status.<br><br>
+                                <strong>Account Balance: $ $formatted_balance</strong></p>
                                 </td>
                                 </tr>
                             </table>
@@ -1958,6 +1966,8 @@ class emailMessage
 
     public function AdminDomMsg($full_name, $amount, $user_balance, $trans_status, $trans_type, $APP_NAME, $APP_URL, $SITE_ADDRESS)
     {
+        $formatted_amount = number_format($amount, 2, '.', ',');
+    $formatted_balance = number_format($user_balance, 2, '.', ',');
         return "<!doctype html>
     <html>
             <head>
@@ -2308,8 +2318,8 @@ class emailMessage
                                 <tr>
                                 <td>
                                 <h2>Hi $full_name,</h2>
-                                <p>A $trans_type Transaction of <strong>$amount</strong> is $trans_status.<br><br>
-                                <strong>Account Balance: $user_balance</strong></p>
+                                <p>A $trans_type Transaction of <strong>$$formatted_amount</strong> is $trans_status.<br><br>
+                                <strong>Account Balance: $ $formatted_balance</strong></p>
                                 </td>
                                 </tr>
                             </table>
@@ -2343,6 +2353,8 @@ class emailMessage
 
     public function AdminInterMsg($full_name, $amount, $user_balance, $trans_status, $trans_type, $APP_NAME, $APP_URL, $SITE_ADDRESS)
     {
+        $formatted_amount = number_format($amount, 2, '.', ',');
+    $formatted_balance = number_format($user_balance, 2, '.', ',');
         return "<!doctype html>
     <html>
             <head>
@@ -2693,8 +2705,8 @@ class emailMessage
                                 <tr>
                                 <td>
                                 <h2>Hi $full_name,</h2>
-                                <p>A $trans_type Transaction of <strong>$amount</strong> is $trans_status.<br><br>
-                                <strong>Account Balance: $user_balance</strong></p>
+                                <p>A $trans_type Transaction of <strong>$$formatted_amount</strong> is $trans_status.<br><br>
+                                <strong>Account Balance: $ $formatted_balance</strong></p>
                                 </td>
                                 </tr>
                             </table>
@@ -2728,6 +2740,8 @@ class emailMessage
 
     public function AdminStockMsg($full_name, $amount, $user_balance, $trans_status, $trans_type, $APP_NAME, $APP_URL, $SITE_ADDRESS)
     {
+        $formatted_amount = number_format($amount, 2, '.', ',');
+    $formatted_balance = number_format($user_balance, 2, '.', ',');
         return "<!doctype html>
     <html>
             <head>
@@ -3078,8 +3092,8 @@ class emailMessage
                                 <tr>
                                 <td>
                                 <h2>Hi $full_name,</h2>
-                                <p>$trans_type with the interest of <strong>$amount</strong> is $trans_status.<br><br>
-                                <strong>Account Balance: $user_balance</strong></p>
+                                <p>$trans_type with the interest of <strong>$$formatted_amount</strong> is $trans_status.<br><br>
+                                <strong>Account Balance: $ $formatted_balance</strong></p>
                                 </td>
                                 </tr>
                             </table>
@@ -3113,6 +3127,8 @@ class emailMessage
 
     public function AdminLoanMsg($full_name, $amount, $loan_balance, $user_acctno, $trans_status, $APP_NAME, $APP_URL, $SITE_ADDRESS)
     {
+        $formatted_amount = number_format($amount, 2, '.', ',');
+    $formatted_balance = number_format($loan_balance, 2, '.', ',');
         return "<!doctype html>
     <html>
             <head>
@@ -3463,8 +3479,8 @@ class emailMessage
                                 <tr>
                                 <td>
                                 <h2>Hi $full_name,</h2>
-                                <p>A Loan amount of <strong>$$amount</strong> on $user_acctno account is $trans_status.<br><br>
-                                <strong>Loan Balance: $loan_balance</strong></p>
+                                <p>A Loan amount of <strong>$$formatted_amount</strong> on $user_acctno account is $trans_status.<br><br>
+                                <strong>Loan Balance: $ $formatted_balance</strong></p>
                                 </td>
                                 </tr>
                             </table>
