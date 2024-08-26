@@ -58,7 +58,7 @@ if ($row['acct_status'] === 'suspend') {
                 <div class="form-group basic">
                     <div class="input-wrapper">
                         <label class="label">Account Number</label>
-                        <input type="text" inputmode="numeric" required pattern="[0-9]+" minlength="10" maxlength="12" autocomplete="off" class="form-control" name="account_number" placeholder="0123456789">
+                        <input type="text"  autocomplete="off" class="form-control" name="account_number" placeholder="0123456789">
                         <i class="clear-input">
                             <ion-icon name="close-circle"></ion-icon>
                         </i>

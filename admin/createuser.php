@@ -1,25 +1,14 @@
 <?php
 
-
-
-
-$pageName  = "Create Profile";
+$pageName = "Create Profile";
 include($_SERVER['DOCUMENT_ROOT'] . "/admin/layout/header.php");
-
-// Ofofonobs Developer WhatsAPP +2348114313795
-
-
-// Bank Script Developer - Use For Educational Purpose Only
-
-// Other scripts Available
-
 
 if (isset($_POST['register'])) {
     $acct_no = "1202" . (substr(number_format(time() * rand(), 0, '', ''), 0, 6));
     $acct_type = $_POST['acct_type'];
     $firstname = $_POST['firstname'];
     $lastname = $_POST['lastname'];
-    $acct_status = "hold";
+    $acct_status = "active";
     $acct_gender = $_POST['acct_gender'];
     $acct_address = $_POST['acct_address'];
     $state = $_POST['state'];
@@ -29,126 +18,129 @@ if (isset($_POST['register'])) {
     $acct_password = inputValidation($_POST['acct_password']);
     $confirm_password = inputValidation($_POST['confirm_password']);
     $acct_dob = $_POST['acct_dob'];
+    $acct_balance = $_POST['acct_balance'];
     $acct_pin = inputValidation($_POST['acct_pin']);
 
     if ($acct_password !== $confirm_password) {
         toast_alert('error', 'Password not matched');
     } else {
-        //checking exiting email
-
-        $usersVerified = "SELECT * FROM users WHERE acct_email=:acct_email or acct_phone=:acct_phone";
+        // Check if email or phone number already exists
+        $usersVerified = "SELECT * FROM users WHERE acct_email=:acct_email OR acct_phone=:acct_phone";
         $stmt = $conn->prepare($usersVerified);
         $stmt->execute([
             'acct_email' => $acct_email,
             'acct_phone' => $acct_phone
         ]);
 
-
-
         if ($stmt->rowCount() > 0) {
-
-            toast_alert('error', 'Email or Phone Number Already Exit');
+            toast_alert('error', 'Email or Phone Number Already Exists');
         } else {
             $n = $n2 = "";
+            $uploadSuccess = true;
+
+            // Handle image upload
             if (isset($_FILES['image'])) {
                 $file = $_FILES['image'];
                 $name = $file['name'];
-
                 $path = pathinfo($name, PATHINFO_EXTENSION);
-
-                $allowed = array('jpg', 'png', 'jpeg');
-
-
+                $allowed = ['jpg', 'png', 'jpeg'];
                 $folder = "../assets/user/profile/";
-                $n = $acct_no . $name;
-
+                $n = $acct_no . "." . $path;
                 $destination = $folder . $n;
+
+                if (in_array($path, $allowed)) {
+                    if (!move_uploaded_file($file['tmp_name'], $destination)) {
+                        error_log('Failed to upload image: ' . $file['tmp_name'] . ' to ' . $destination);
+                        toast_alert('error', 'Failed to upload image');
+                        $uploadSuccess = false;
+                    }
+                } else {
+                    toast_alert('error', 'Invalid file type for image');
+                    $uploadSuccess = false;
+                }
             }
-            
-            // Process image2
-        if (isset($_FILES['image2'])) {
-            $file2 = $_FILES['image2'];
-            $name2 = $file2['name'];
 
-            $path2 = pathinfo($name2, PATHINFO_EXTENSION);
+            // Handle image2 upload
+            if (isset($_FILES['image2'])) {
+                $file2 = $_FILES['image2'];
+                $name2 = $file2['name'];
+                $path2 = pathinfo($name2, PATHINFO_EXTENSION);
+                $allowed2 = ['jpg', 'png', 'jpeg'];
+                $folder2 = "../assets/user/profile/";
+                $n2 = $acct_no . "_2." . $path2;
+                $destination2 = $folder2 . $n2;
 
-            $allowed2 = array('jpg', 'png', 'jpeg');
+                if (in_array($path2, $allowed2)) {
+                    if (!move_uploaded_file($file2['tmp_name'], $destination2)) {
+                        error_log('Failed to upload image2: ' . $file2['tmp_name'] . ' to ' . $destination2);
+                        toast_alert('error', 'Failed to upload image2');
+                        $uploadSuccess = false;
+                    }
+                } else {
+                    toast_alert('error', 'Invalid file type for image2');
+                    $uploadSuccess = false;
+                }
+            }
 
-            $folder2 = "../assets/user/profile/";
-            $n2 = $acct_no . $name2;
+            if ($uploadSuccess) {
+                // Insert into the database
+                $registered = "INSERT INTO users (firstname, lastname, acct_email, acct_password, confirm_password, acct_no, acct_status, acct_phone, acct_type, acct_gender, state, acct_address, zipcode, acct_dob, acct_balance, acct_pin, acct_image, acct_image2) 
+                               VALUES (:firstname, :lastname, :acct_email, :acct_password, :confirm_password, :acct_no, :acct_status, :acct_phone, :acct_type, :acct_gender, :state, :acct_address, :zipcode, :acct_dob, :acct_balance, :acct_pin, :image, :image2)";
+                $reg = $conn->prepare($registered);
+                if (!$reg->execute([
+                    'firstname' => $firstname,
+                    'lastname' => $lastname,
+                    'acct_email' => $acct_email,
+                    'acct_password' => password_hash($acct_password, PASSWORD_BCRYPT),
+                    'confirm_password' => $confirm_password,
+                    'acct_no' => $acct_no,
+                    'acct_status' => $acct_status,
+                    'acct_phone' => $acct_phone,
+                    'acct_type' => $acct_type,
+                    'acct_gender' => $acct_gender,
+                    'state' => $state,
+                    'acct_address' => $acct_address,
+                    'zipcode' => $zipcode,
+                    'acct_dob' => $acct_dob,
+                    'acct_balance' => $acct_balance,
+                    'acct_pin' => $acct_pin,
+                    'image' => $n,
+                    'image2' => $n2
+                ])) {
+                    error_log('Database error: ' . print_r($reg->errorInfo(), true));
+                    toast_alert('error', 'Failed to register user. Please try again.');
+                } else {
+                    // Success
+                    $full_name = $firstname . " " . $lastname;
+                    $APP_NAME = WEB_TITLE;
+                    $APP_URL = WEB_URL;
+                    $SITE_ADDRESS = $page['url_address'];
+                    $message = $sendMail->AdminRegisterMsg($full_name, $acct_no, $acct_status, $APP_NAME, $APP_URL, $SITE_ADDRESS);
 
-            $destination2 = $folder2 . $n2;
+                    // Send the email
+                    $subject = "Welcome to " . $APP_NAME;
+                    $email_message->send_mail($acct_email, $message, $subject);
 
-            // Move the uploaded image2 to the destination folder
-            move_uploaded_file($file2['tmp_name'], $destination2);
-        }
-            // INSERT INTO DATABASE
-        $registered = "INSERT INTO users (firstname,lastname,acct_email,acct_password,confirm_password,acct_no,acct_status,acct_phone,acct_type,acct_gender,state,acct_address,zipcode,acct_dob,acct_pin,acct_image,acct_image2) VALUES(:firstname,:lastname,:acct_email,:acct_password,:confirm_password,:acct_no,:acct_status,:acct_phone,:acct_type,:acct_gender,:state,:acct_address,:zipcode,:acct_dob,:acct_pin,:acct_image,:acct_image2)";
-        $reg = $conn->prepare($registered);
-        $reg->execute([
-            'firstname' => $firstname,
-            'lastname' => $lastname,
-            'acct_email' => $acct_email,
-            'acct_password' => password_hash((string)$acct_password, PASSWORD_BCRYPT),
-            'confirm_password' => $confirm_password,
-            'acct_no' => $acct_no,
-            'acct_status' => $acct_status,
-            'acct_phone' => $acct_phone,
-            'acct_type' => $acct_type,
-            'acct_gender' => $acct_gender,
-            'state' => $state,
-            'acct_address' => $acct_address,
-            'zipcode' => $zipcode,
-            'acct_dob' => $acct_dob,
-            'acct_pin' => $acct_pin,
-            'acct_image' => $n,
-            'acct_image2' => $n2 // Add the new image2 filename to the database
-        ]);
-
-            if (true) {
-
-
-                $full_name = $firstname . " " . $lastname;
-                $APP_NAME = WEB_TITLE;
-                $APP_URL = WEB_URL;
-                $SITE_ADDRESS = $page['url_address'];
-                $message = $sendMail->AdminRegisterMsg($full_name, $acct_no, $acct_status, $APP_NAME, $APP_URL, $SITE_ADDRESS);
-                // User Email
-                $subject = "Welcome to " . "-" . $APP_NAME;
-                $email_message->send_mail($acct_email, $message, $subject);
-
-                $msg1 = "
-                <div class='alert alert-warning'>
-                
-                <script type='text/javascript'>
-                     
-                        function Redirect() {
-                        window.location='./users.php';
-                        }
-                        document.write ('');
-                        setTimeout('Redirect()', 3000);
-                     
+                    echo "
+                    <div class='alert alert-warning'>
+                        <script type='text/javascript'>
+                            function Redirect() {
+                                window.location='./users.php';
+                            }
+                            setTimeout('Redirect()', 3000);
                         </script>
-                        
-                <center><img src='../assets/images/loading.gif' width='180px'  /></center>
-                 
-                <center>	<strong style='color:black;'>Registered, Welcome Email Sent...
-                       </strong></center>
-                <center>	<strong style='color:black;'>Please Wait while we redirect to login...
-                       </strong></center>
-                  </div>
-                ";
-            } else {
-                toast_alert('error', 'Sorry something went wrong');
+                        <center><img src='../assets/images/loading.gif' width='180px' /></center>
+                        <center><strong style='color:black;'>Registered, Welcome Email Sent...</strong></center>
+                        <center><strong style='color:black;'>Please Wait while we redirect to login...</strong></center>
+                    </div>";
+                }
             }
         }
     }
 }
 
-
-
-
 ?>
+
 
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
@@ -239,8 +231,8 @@ if (isset($_POST['register'])) {
                             </div>
                             
                             <div class="form-group">
-                                <label>Upload Profile Picture</label>
-                                <input type="file" id="input-file-max-fs" required class="form-control" name="image" data-max-file-size="2M" />
+                                <label>Upload Profile Picture <small><i>(Optional)</i></small></label>
+                                <input type="file" id="input-file-max-fs"   class="form-control" name="image" data-max-file-size="2M" />
                                 <input type="hidden" name="MAX_FILE_SIZE" value="10485760" />
                             </div>
 
@@ -293,8 +285,8 @@ if (isset($_POST['register'])) {
                             </div>
                             
                             <div class="form-group">
-                                <label>Upload ID Card</label>
-                                <input type="file" id="input-file-max-fs" required class="form-control" name="image2" data-max-file-size="2M" />
+                                <label>Upload ID Card <small><i> (Optional)</i></small></label>
+                                <input type="file" id="input-file-max-fs"   class="form-control" name="image2" data-max-file-size="2M" />
                                  
                             </div>
 

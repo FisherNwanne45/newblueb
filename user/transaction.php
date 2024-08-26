@@ -95,41 +95,38 @@ include($_SERVER['DOCUMENT_ROOT'] . "/user/layout/header.php");
 
             ?>
 
-            <a href="./transaction-info.php?id=<?php echo $result['trans_id']; ?>" class="item">
-                <div class="detail">
-                    <div>
-                        <h2><?= $result['trans_type'] ?></h2>
-                        <span><?= $result['account_name'] ?></span>
+                <a href="./transaction-info.php?id=<?php echo $result['trans_id']; ?>" class="item">
+                    <div class="detail">
+                        <div>
+                            <h2><?= $result['trans_type'] ?></h2>
 
-                        <p><?= $result['created_at'] ?></p>
-                        <p><?= $result['description'] ?></p>
+                            <p><?= $result['created_at'] ?></p>
+                        </div>
                     </div>
-                </div>
-                <div class="right">
-                    <?php
+                    <div class="right">
+                        <?php
                         if ($result['transaction_type'] === 'credit') {
                         ?>
 
-                    <h2 class="text-success">
-                        +<?php echo number_format($amount, 2, '.', ','); ?>
-                    </h2>
+                            <h2 class="text-success">
+                                +<?php echo number_format($amount, 2, '.', ','); ?>
+                            </h2>
 
-                    <?php
+                        <?php
                         } else {
                         ?>
 
-                    <h2 class="text-danger">
-                        -<?php echo number_format($amount, 2, '.', ','); ?>
-                    </h2>
+                            <h2 class="text-danger">
+                                -<?php echo number_format($amount, 2, '.', ','); ?>
+                            </h2>
 
-                    <?php
+                        <?php
                         }
                         ?>
-                    <strong> <?= $result['trans_status'] ?></strong>
 
 
-                </div>
-            </a>
+                    </div>
+                </a>
 
             <?php
 
@@ -150,13 +147,13 @@ include($_SERVER['DOCUMENT_ROOT'] . "/user/layout/header.php");
 
             if ($stmt->rowCount() == 0) {
             ?>
-            <div class="transactions">
-                <a href="#" class="item">
+                <div class="transactions">
+                    <a href="#" class="item">
 
-                    <h2>No transaction Yet</h2>
+                        <h2>No transaction Yet</h2>
 
-                </a>
-            </div>
+                    </a>
+                </div>
 
             <?php
             } else {

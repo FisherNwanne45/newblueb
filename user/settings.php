@@ -22,7 +22,35 @@ include($_SERVER['DOCUMENT_ROOT'] . "/user/layout/header.php");
         <!--    <ion-icon name="menu-outline"></ion-icon>-->
         <!--</a>-->
         <a href="<?= $web_url ?>/user/settings.php" class="headerButton">
-            <img src="<?= $web_url ?>/assets/user/profile/<?= $row['acct_image'] ?>" alt="image" class="imaged w32">
+           <?php
+    // Fetch the image name from the database
+    $user_image = $row['acct_image']; // Assuming $row contains the user data from the database
+    $user_image2 = $row['acct_image2'];
+
+    // Define the path to the images directory
+    $image_folder = $web_url . "/assets/user/profile/";
+
+    // Set the default image
+    $default_image = "default.png";
+    $default_image2 = "id.jpg";
+
+    // Check if the image exists and is not empty
+    if (!empty($user_image) && file_exists($_SERVER['DOCUMENT_ROOT'] . "/assets/user/profile/" . $user_image)) {
+        $image_to_display = $image_folder . $user_image;
+    } else {
+        $image_to_display = $image_folder . $default_image;
+    }
+    
+    
+    if (!empty($user_image2) && file_exists($_SERVER['DOCUMENT_ROOT'] . "/assets/user/profile/" . $user_image2)) {
+        $image_to_display2 = $image_folder . $user_image2;
+    } else {
+        $image_to_display2 = $image_folder . $default_image2;
+    }
+?>
+
+<!-- Display the image in HTML -->
+<img src="<?= $image_to_display ?>" alt="image" class="imaged w32">
         </a>
     </div>
     <div class="pageTitle">
@@ -49,7 +77,8 @@ include($_SERVER['DOCUMENT_ROOT'] . "/user/layout/header.php");
     <div class="section mt-3 text-center">
         <div class="avatar-section">
             <a href="#">
-                <img src="<?= $web_url ?>/assets/user/profile/<?= $row['acct_image'] ?>" alt="avatar" class="imaged w100 rounded">
+                <img src="<?= $image_to_display ?>" alt="avatar" class="imaged w100 rounded">
+                 
                 <a href="<?= $web_url ?>/user/upload-pics.php" class="button">
                     <ion-icon name="camera-outline"></ion-icon>
                 </a>
@@ -117,7 +146,8 @@ include($_SERVER['DOCUMENT_ROOT'] . "/user/layout/header.php");
                 <div class="in">
                     <div>Identity Document
                         <div class="text-muted">
-                           <img src="../assets/user/profile/<?= $row['acct_image2'] ?>" alt="ID Card" id="id-card-preview" style="height: 150px;">
+                            <img src="<?= $image_to_display2 ?>" alt="ID Card" id="id-card-preview" style="height: 150px;">
+                          
                         </div>
                     </div>
                 </div>

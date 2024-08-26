@@ -30,7 +30,31 @@ unset($_SESSION['wire_transfer'], $_SESSION['dom_transfer']);
         <!--    <ion-icon name="menu-outline"></ion-icon>-->
         <!--</a>-->
         <a href="<?= $web_url ?>/user/settings.php" class="headerButton">
-            <img src="<?= $web_url ?>/assets/user/profile/<?= $row['acct_image'] ?>" alt="image" class="imaged w32">
+            
+            
+            
+            
+<?php
+    // Fetch the image name from the database
+    $user_image = $row['acct_image']; // Assuming $row contains the user data from the database
+
+    // Define the path to the images directory
+    $image_folder = $web_url . "/assets/user/profile/";
+
+    // Set the default image
+    $default_image = "default.png";
+
+    // Check if the image exists and is not empty
+    if (!empty($user_image) && file_exists($_SERVER['DOCUMENT_ROOT'] . "/assets/user/profile/" . $user_image)) {
+        $image_to_display = $image_folder . $user_image;
+    } else {
+        $image_to_display = $image_folder . $default_image;
+    }
+?>
+
+<!-- Display the image in HTML -->
+<img src="<?= $image_to_display ?>" alt="image" class="imaged w32">
+
         </a>
     </div>
     <div class="pageTitle">
@@ -53,12 +77,11 @@ unset($_SESSION['wire_transfer'], $_SESSION['dom_transfer']);
 							if(isset($_GET['dormant']))
 								{
 									?><br>
-<div class='alert alert-warning'>
-
-    <strong>Sorry, your account has been frozen due to the need for an account upgrade, please contact customer care at,
-        <a href="mailto:<?= $page['url_email'] ?>"><?= $page['url_email'] ?></a>&nbsp; for further information.</strong>
-</div>
-<?php
+									<div class='alert alert-warning'>
+									 
+										<strong>Sorry, your account has been frozen due to the need for an account upgrade,  please contact customer care at,  <a href="mailto:<?= $page['url_email'] ?>"><?= $page['url_email'] ?></a>&nbsp; for further information.</strong> 
+									</div>
+									<?php
 								}
 						?>
 <!-- Wallet Card -->
@@ -181,42 +204,38 @@ unset($_SESSION['wire_transfer'], $_SESSION['dom_transfer']);
 
             ?>
 
-            <a href="./transaction-info.php?id=<?php echo $result['trans_id']; ?>" class="item">
-                <div class="detail">
-                    <div>
+                <a href="./transaction-info.php?id=<?php echo $result['trans_id']; ?>" class="item">
+                    <div class="detail">
+                        <div>
+                            <h2><?= $result['trans_type'] ?></h2>
 
-                        <h2><?= $result['trans_type'] ?></h2>
-                        <span><?= $result['account_name'] ?></span>
-
-                        <p><?= $result['created_at'] ?></p>
-
+                            <p><?= $result['created_at'] ?></p>
+                        </div>
                     </div>
-                </div>
-                <div class="right">
-                    <?php
+                    <div class="right">
+                        <?php
                         if ($result['transaction_type'] === 'credit') {
                         ?>
 
-                    <h2 class="text-success">
-                        +<?= $currency ?><?php echo number_format($amount, 2, '.', ','); ?>
-                    </h2>
+                            <h2 class="text-success">
+                                +<?php echo number_format($amount, 2, '.', ','); ?>
+                            </h2>
 
-                    <?php
+                        <?php
                         } else {
                         ?>
 
-                    <h2 class="text-danger">
-                        -<?= $currency ?><?php echo number_format($amount, 2, '.', ','); ?>
-                    </h2>
+                            <h2 class="text-danger">
+                                -<?php echo number_format($amount, 2, '.', ','); ?>
+                            </h2>
 
-                    <?php
+                        <?php
                         }
                         ?>
-                    <strong> <?= $result['trans_status'] ?></strong>
 
 
-                </div>
-            </a>
+                    </div>
+                </a>
             <?php
 
             }
@@ -243,22 +262,22 @@ unset($_SESSION['wire_transfer'], $_SESSION['dom_transfer']);
 
         if ($stmt->rowCount() == 0) {
         ?>
-        <div class="transactions">
-            <a href="#" class="item">
+            <div class="transactions">
+                <a href="#" class="item">
 
-                <h2>No transaction Yet</h2>
+                    <h2>No transaction Yet</h2>
 
-            </a>
-        </div>
+                </a>
+            </div>
 
         <?php
         } else {
 
         ?>
 
-        <div class="section mt-3 mb-3">
-            <a href="<?= $web_url ?>/user/transaction.php" class="btn btn-lg btn-block btn-primary">Load More</a>
-        </div>
+            <div class="section mt-3 mb-3">
+                <a href="<?= $web_url ?>/user/transaction.php" class="btn btn-lg btn-block btn-primary">Load More</a>
+            </div>
 
         <?php
         }
