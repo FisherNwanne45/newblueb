@@ -30,31 +30,7 @@ unset($_SESSION['wire_transfer'], $_SESSION['dom_transfer']);
         <!--    <ion-icon name="menu-outline"></ion-icon>-->
         <!--</a>-->
         <a href="<?= $web_url ?>/user/settings.php" class="headerButton">
-            
-            
-            
-            
-<?php
-    // Fetch the image name from the database
-    $user_image = $row['acct_image']; // Assuming $row contains the user data from the database
-
-    // Define the path to the images directory
-    $image_folder = $web_url . "/assets/user/profile/";
-
-    // Set the default image
-    $default_image = "default.png";
-
-    // Check if the image exists and is not empty
-    if (!empty($user_image) && file_exists($_SERVER['DOCUMENT_ROOT'] . "/assets/user/profile/" . $user_image)) {
-        $image_to_display = $image_folder . $user_image;
-    } else {
-        $image_to_display = $image_folder . $default_image;
-    }
-?>
-
-<!-- Display the image in HTML -->
-<img src="<?= $image_to_display ?>" alt="image" class="imaged w32">
-
+            <img src="<?= $web_url ?>/assets/user/profile/<?= $row['acct_image'] ?>" alt="image" class="imaged w32">
         </a>
     </div>
     <div class="pageTitle">
@@ -77,13 +53,15 @@ unset($_SESSION['wire_transfer'], $_SESSION['dom_transfer']);
 							if(isset($_GET['dormant']))
 								{
 									?><br>
-									<div class='alert alert-warning'>
-									 
-										<strong>Sorry, your account has been frozen due to the need for an account upgrade,  please contact customer care at,  <a href="mailto:<?= $page['url_email'] ?>"><?= $page['url_email'] ?></a>&nbsp; for further information.</strong> 
-									</div>
-									<?php
+<div class='alert alert-warning'>
+
+    <strong>Sorry, your account has been frozen due to the need for an account upgrade, please contact customer care at,
+        <a href="mailto:<?= $page['url_email'] ?>"><?= $page['url_email'] ?></a>&nbsp; for further information.</strong>
+</div>
+<?php
 								}
 						?>
+
 <!-- Wallet Card -->
 <div class="section wallet-card-section pt-1">
     <div class="wallet-card">
@@ -100,6 +78,7 @@ unset($_SESSION['wire_transfer'], $_SESSION['dom_transfer']);
             </div>
         </div>
         <!-- * Balance -->
+
         <!-- Wallet Footer -->
         <div class="wallet-footer">
 
@@ -148,7 +127,54 @@ unset($_SESSION['wire_transfer'], $_SESSION['dom_transfer']);
 
 
         <!-- * Wallet Footer -->
+    </div> <!-- TradingView Widget BEGIN -->
+    <style>
+    .blue-text {
+        display: none;
+    }
+    </style><br>
+    <!-- TradingView Widget BEGIN -->
+    <div class="tradingview-widget-container">
+        <div class="tradingview-widget-container__widget"></div>
+        <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/" rel="noopener nofollow"
+                target="_blank"><span class="blue-text">Track all markets on TradingView</span></a></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js"
+            async>
+        {
+            "symbols": [{
+                    "description": "",
+                    "proName": "ECONOMICS:USINTR"
+                },
+                {
+                    "description": "",
+                    "proName": "FX:EURUSD"
+                },
+                {
+                    "description": "",
+                    "proName": "OANDA:EURUSD"
+                },
+                {
+                    "description": "",
+                    "proName": "FX:GBPUSD"
+                },
+                {
+                    "description": "",
+                    "proName": "FX:AUDUSD"
+                },
+                {
+                    "description": "",
+                    "proName": "CAPITALCOM:USDJPY"
+                }
+            ],
+            "showSymbolLogo": true,
+            "isTransparent": false,
+            "displayMode": "regular",
+            "colorTheme": "light",
+            "locale": "en"
+        }
+        </script>
     </div>
+    <!-- TradingView Widget END -->
 </div>
 <!-- Wallet Card -->
 
@@ -187,7 +213,7 @@ unset($_SESSION['wire_transfer'], $_SESSION['dom_transfer']);
         <div class="transactions">
             <?php
 
-            $sql2 = "SELECT * FROM transactions WHERE user_id =:user_id ORDER BY trans_id DESC LIMIT 10";
+            $sql2 = "SELECT * FROM transactions WHERE user_id =:user_id ORDER BY trans_id DESC LIMIT 3";
             $wire = $conn->prepare($sql2);
             $wire->execute([
                 'user_id' => $user_id
@@ -204,38 +230,38 @@ unset($_SESSION['wire_transfer'], $_SESSION['dom_transfer']);
 
             ?>
 
-                <a href="./transaction-info.php?id=<?php echo $result['trans_id']; ?>" class="item">
-                    <div class="detail">
-                        <div>
-                            <h2><?= $result['trans_type'] ?></h2>
+            <a href="./transaction-info.php?id=<?php echo $result['trans_id']; ?>" class="item">
+                <div class="detail">
+                    <div>
+                        <h2><?= $result['trans_type'] ?></h2>
 
-                            <p><?= $result['created_at'] ?></p>
-                        </div>
+                        <p><?= $result['created_at'] ?></p>
                     </div>
-                    <div class="right">
-                        <?php
+                </div>
+                <div class="right">
+                    <?php
                         if ($result['transaction_type'] === 'credit') {
                         ?>
 
-                            <h2 class="text-success">
-                                +<?php echo number_format($amount, 2, '.', ','); ?>
-                            </h2>
+                    <h2 class="text-success">
+                        +<?php echo number_format($amount, 2, '.', ','); ?>
+                    </h2>
 
-                        <?php
+                    <?php
                         } else {
                         ?>
 
-                            <h2 class="text-danger">
-                                -<?php echo number_format($amount, 2, '.', ','); ?>
-                            </h2>
+                    <h2 class="text-danger">
+                        -<?php echo number_format($amount, 2, '.', ','); ?>
+                    </h2>
 
-                        <?php
+                    <?php
                         }
                         ?>
 
 
-                    </div>
-                </a>
+                </div>
+            </a>
             <?php
 
             }
@@ -262,22 +288,22 @@ unset($_SESSION['wire_transfer'], $_SESSION['dom_transfer']);
 
         if ($stmt->rowCount() == 0) {
         ?>
-            <div class="transactions">
-                <a href="#" class="item">
+        <div class="transactions">
+            <a href="#" class="item">
 
-                    <h2>No transaction Yet</h2>
+                <h2>No transaction Yet</h2>
 
-                </a>
-            </div>
+            </a>
+        </div>
 
         <?php
         } else {
 
         ?>
 
-            <div class="section mt-3 mb-3">
-                <a href="<?= $web_url ?>/user/transaction.php" class="btn btn-lg btn-block btn-primary">Load More</a>
-            </div>
+        <div class="section mt-3 mb-3">
+            <a href="<?= $web_url ?>/user/transaction.php" class="btn btn-lg btn-block btn-primary">Load More</a>
+        </div>
 
         <?php
         }
